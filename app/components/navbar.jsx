@@ -10,7 +10,7 @@ function Navbar() {
           <Link
             href="/"
             className=" text-[#16f2b3] text-3xl font-bold">
-              &lt; Mr Adeel  /&gt;
+              &lt; <span className="text-pink-500 text-4xl">Mr Adeel</span>  /&gt;
           </Link>
         </div>
 
