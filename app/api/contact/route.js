@@ -1,19 +1,17 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Create Nodemailer transporter with direct credentials
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
-    user: 'adeelarshad601@gmail.com',
-    pass: 'qncbtyumkdyissjd', 
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.GMAIL_PASSKEY,
   },
 });
 
-// Template 1: Email received by YOU
 const generateAdminEmailTemplate = (name, email, userMessage) => `
   <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
     <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
@@ -29,7 +27,6 @@ const generateAdminEmailTemplate = (name, email, userMessage) => `
   </div>
 `;
 
-// Template 2: Auto-Reply sent to the USER
 const generateUserAutoReplyTemplate = (name) => `
   <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
     <div style="max-width: 600px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
@@ -55,25 +52,22 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // 1. Mail to YOU (Notification)
     const adminMailOptions = {
-      from: '"Portfolio Contact" <adeelarshad601@gmail.com>', 
-      to: 'adeelarshad601@gmail.com', 
+      from: `"Portfolio Contact" <${process.env.EMAIL_ADDRESS}>`, 
+      to: process.env.EMAIL_ADDRESS, 
       subject: `New Message From ${name}`, 
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${userMessage}`, 
       html: generateAdminEmailTemplate(name, email, userMessage), 
       replyTo: email, 
     };
 
-    // 2. Mail to VISITOR (Auto-Reply)
     const userMailOptions = {
-      from: '"Adeel Arshad" <adeelarshad601@gmail.com>', 
-      to: email, // Bhejney wale ka email
+      from: `"Adeel Arshad" <${process.env.EMAIL_ADDRESS}>`, 
+      to: email, 
       subject: `Thanks for reaching out, ${name}!`, 
       html: generateUserAutoReplyTemplate(name), 
     };
 
-    // Send both emails simultaneously
     await Promise.all([
       transporter.sendMail(adminMailOptions),
       transporter.sendMail(userMailOptions)
