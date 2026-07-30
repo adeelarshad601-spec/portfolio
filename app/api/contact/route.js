@@ -1,17 +1,14 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
+// Transporter configuration for Vercel / Serverless
 const transporter = nodemailer.createTransport({
   service: 'gmail',
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
   auth: {
     user: process.env.EMAIL_ADDRESS,
-    pass: process.env.GMAIL_PASSKEY,
+    pass: process.env.GMAIL_PASSKEY, // Must be 16-character App Password without spaces
   },
 });
-
 
 const generateAdminEmailTemplate = (name, email, userMessage) => `
   <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f4f4f4;">
@@ -69,10 +66,9 @@ export async function POST(request) {
       html: generateUserAutoReplyTemplate(name), 
     };
 
-    await Promise.all([
-      transporter.sendMail(adminMailOptions),
-      transporter.sendMail(userMailOptions)
-    ]);
+    // Sequential send for better reliability in serverless functions
+    await transporter.sendMail(adminMailOptions);
+    await transporter.sendMail(userMailOptions);
 
     return NextResponse.json({
       success: true,
