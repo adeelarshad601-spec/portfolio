@@ -5,6 +5,7 @@ export const personalData = {
   description: "My name is Adeel Arshad, and I am a passionate Front-End Engineer. I am a quick learner with a strong self-learning attitude and enjoy exploring new technologies. I specialize in JavaScript and web application development, creating solutions that make the web more accessible and interactive. I am enthusiastic about problem-solving and open to job opportunities that match my skills and interests.",
   email: 'adeelarshad601@gmail.com',
   phone: '+92 327 1411827',
+  whatsapp: '923271411827',
   address: 'Faisalabad, Punjab, Pakistan',
   github: 'https://github.com/adeelarshad601-spec',
   facebook: 'https://www.facebook.com/adeel.arshad.96199344',
