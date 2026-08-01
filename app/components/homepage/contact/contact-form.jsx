@@ -17,7 +17,8 @@ function ContactForm() {
 
   // Check if all required fields are filled
   const checkRequired = () => {
-    const isRequiredError = !userInput.name || !userInput.email || !userInput.message;
+    const isRequiredError =
+      !userInput.name || !userInput.email || !userInput.message;
     setError((prev) => ({ ...prev, required: isRequiredError }));
   };
 
@@ -37,17 +38,15 @@ function ContactForm() {
 
     try {
       setIsLoading(true);
-      // ✅ CORRECT
-const res = await axios.post(
-  "/api/contact",
-  userInput
-);
+      const res = await axios.post("/api/contact", userInput);
 
       toast.success("Message sent successfully!");
       setUserInput({ name: "", email: "", message: "" });
       setError({ email: false, required: false });
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Server error. Try again later.");
+      toast.error(
+        err?.response?.data?.message || "Server error. Try again later.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -55,10 +54,14 @@ const res = await axios.post(
 
   return (
     <div>
-      <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">Contact with me</p>
+      <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
+        Contact with me
+      </p>
       <div className="max-w-3xl text-white rounded-lg border border-[#464c6a] p-3 lg:p-5">
         <p className="text-sm text-[#d3d8e8]">
-          {"If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests."}
+          {
+            "If you have any questions or concerns, please don't hesitate to contact me. I am open to any work opportunities that align with my skills and interests."
+          }
         </p>
 
         <div className="mt-6 flex flex-col gap-4">
@@ -71,7 +74,9 @@ const res = await axios.post(
               maxLength="100"
               required
               value={userInput.name}
-              onChange={(e) => setUserInput({ ...userInput, name: e.target.value })}
+              onChange={(e) =>
+                setUserInput({ ...userInput, name: e.target.value })
+              }
               onBlur={checkRequired}
             />
           </div>
@@ -85,11 +90,15 @@ const res = await axios.post(
               maxLength="100"
               required
               value={userInput.email}
-              onChange={(e) => setUserInput({ ...userInput, email: e.target.value })}
+              onChange={(e) =>
+                setUserInput({ ...userInput, email: e.target.value })
+              }
               onBlur={validateEmail}
             />
             {error.email && (
-              <p className="text-sm text-red-400">Please provide a valid email!</p>
+              <p className="text-sm text-red-400">
+                Please provide a valid email!
+              </p>
             )}
           </div>
 
@@ -102,7 +111,9 @@ const res = await axios.post(
               name="message"
               required
               value={userInput.message}
-              onChange={(e) => setUserInput({ ...userInput, message: e.target.value })}
+              onChange={(e) =>
+                setUserInput({ ...userInput, message: e.target.value })
+              }
               onBlur={checkRequired}
               rows="4"
             />
